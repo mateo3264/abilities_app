@@ -207,8 +207,9 @@ export default {
         this.topic_list.push(1)
         console.log('this.topic_list')
         this.dataBJ = [this.topic_list,]
+        console.log('this.dataBJ')
         console.log(this.dataBJ)
-        this.radar.series[0].data = [[93, 33, 4, 17, 38, 29, 5, 14, 29, 20, 15, 9, 5, 3, 18, 43, 11, 11, 2, 20, 9, 11, 7, 37, 2, 3, 1]]//this.dataBJ//this.dataBJ
+        this.radar.series[0].data = this.dataBJ//[[93, 33, 4, 17, 38, 29, 5, 14, 29, 20, 15, 9, 5, 3, 18, 43, 11, 11, 2, 20, 9, 11, 7, 37, 2, 3, 1]]//this.dataBJ//this.dataBJ
         //this.radar.series[0].data.push(this.dataBJ)
         this.radar.radar.indicator = topic_names
         this.radar.series[0].lineStyle = this.lineStyle

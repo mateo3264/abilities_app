@@ -44,7 +44,7 @@
         </el-input>
         <el-input type="textarea" :rows="5" placeholder="Escribe la respuesta" v-model="answer" style="margin-top:20px">
         </el-input>
-        <el-select type="text" placeholder="Selecciona" v-model="selection" style="margin-top:20px">
+        <el-select multiple filterable type="text" placeholder="Selecciona" v-model="selection" style="margin-top:20px">
           <el-option v-for="topic, item in topics" :label="topic.topic" :key="item" :value="topic.id"></el-option>
           
         </el-select>
@@ -152,24 +152,27 @@ export default {
       })
     },
     sendData(){
+      
+    
+    // console.log('what is sent')
+    
+    this.selection.forEach(topic=>{
       const params = {
       ability:this.ability,
       answer:this.answer,
-      selection:this.selection,
-
-      
-    }
-    
-    // console.log('what is sent')
-    // console.log(params)
+      selection:topic,
+      }
+      console.log('params')
+      console.log(params)
       axios.post('http://127.0.0.1:8000/sendAbility/', params)
-    .then(response=>{
-      // console.log('response to sendAbility')
-      console.log(response.data)
-      this.ability = ''
-      this.answer = ''
-      this.selection = ''
-    })
+      .then(response=>{
+        // console.log('response to sendAbility')
+        console.log(response.data)
+        this.ability = ''
+        this.answer = ''
+        this.selection = ''
+      })
+        })
     },
     sendReview(element){
       console.log('abi, ans, sel')
