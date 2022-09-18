@@ -24,7 +24,7 @@
         <el-menu :unique-opened="onlyOneOpened">
           <el-submenu  :class="d.answers_set.length == 0?clase['red']:clase[d.topic.id]" :index="item.toString()" v-for="(d, item) in data" :key="item">
             <!-- <about-component /> -->
-            <template slot="title"><el-icon class="el-icon-question"></el-icon>{{ item }} - {{d.ability}} - {{ d.topic.topic }} - {{d.n_times_reviewed}}</template>
+            <template slot="title"><el-icon class="el-icon-question"></el-icon>{{ item }} - {{d.ability}} - {{ d.topic.topic }} - {{d.n_times_reviewed}} - {{ d.difficulty }}</template>
               
 
               <el-menu-item-group v-for="(answer,sub_item) in d.answers_set" :key="sub_item">
@@ -207,8 +207,7 @@ export default {
             }
           }
           
-        console.log(count, el.answers_set[0].answer)
-        console.log(count)
+
         el.answers_set[0].answer.forEach(it=>{
           console.log(it)
         })
@@ -219,9 +218,9 @@ export default {
         count++
       })
       this.data = result.data
-      console.log('this.$el')
-      console.log(this.$el)
-      // console.log(this.data)
+
+      console.log('this.data')
+      console.log(this.data)
       // console.log('this.topics')
       // console.log(this.topics)
     })
