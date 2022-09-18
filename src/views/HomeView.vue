@@ -96,7 +96,7 @@ export default {
   name: 'HomeView',
   components: {
     //VueFlip
-    'about-component':AboutComponent
+    // 'about-component':AboutComponent
   },
   data(){
     return{
