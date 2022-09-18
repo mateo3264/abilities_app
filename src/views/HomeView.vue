@@ -2,7 +2,6 @@
 
 <template>
   <div class="container">
-    <h1>button-to-send-review branch</h1>
       
         <!-- <vue-flip v-model="token">
           <template v-slot:front>
@@ -24,7 +23,7 @@
       
         <el-menu :unique-opened="onlyOneOpened">
           <el-submenu  :class="d.answers_set.length == 0?clase['red']:clase[d.topic.id]" :index="item.toString()" v-for="(d, item) in data" :key="item">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Lion_waiting_in_Namibia.jpg/1200px-Lion_waiting_in_Namibia.jpg" width="250px" height="250px">
+            <!-- <about-component /> -->
             <template slot="title"><el-icon class="el-icon-question"></el-icon>{{ item }} - {{d.ability}} - {{ d.topic.topic }} - {{d.n_times_reviewed}}</template>
               
 
@@ -32,9 +31,8 @@
                 <el-menu-item  v-for="line, sub2item in answer.answer" :key=sub2item :index="sub_item.toString()">
                   <pre >{{ line }}</pre>
                 </el-menu-item>
-              <el-button @click="sendReview(d)">enviar enviar</el-button>
-              <!-- <el-progress :percentage="Math.floor(Math.random()*100)"></el-progress> -->
               <el-slider v-model="dummySliderVar"></el-slider>
+              <el-button @click="onChange(item)">Enviar Repaso de Habilidad</el-button>
               </el-menu-item-group>
               
           </el-submenu>
@@ -92,11 +90,13 @@
 <script>
 // @ is an alias to /src
 //import VueFlip from 'vue-flip'
+import AboutComponent from '@/components/AboutComponent'
 import axios from 'axios'
 export default {
   name: 'HomeView',
   components: {
     //VueFlip
+    'about-component':AboutComponent
   },
   data(){
     return{
@@ -137,7 +137,10 @@ export default {
       this.data[element].n_times_reviewed += 1
       //if ()
       //this.abilitiesReviewedToday += 1
-      
+      console.log('this.data[element]')
+      console.log(this.data[element])
+      console.log('element')
+      console.log(element)
       // console.log(this.data[element].n_times_reviewed)
       //console.log(this.data[element])
       axios.post('http://127.0.0.1:8000/send/',this.data[element])
@@ -171,10 +174,6 @@ export default {
       this.selection = ''
     })
     },
-    sendReview(element){
-      console.log('abi, ans, sel')
-      console.log(element)
-    }
   },
   mounted(){
     axios.get('http://127.0.0.1:8000/abilities-reviewed-today/')
