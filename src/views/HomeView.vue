@@ -90,7 +90,7 @@
 <script>
 // @ is an alias to /src
 //import VueFlip from 'vue-flip'
-import AboutComponent from '@/components/AboutComponent'
+//import AboutComponent from '@/components/AboutComponent'
 import axios from 'axios'
 export default {
   name: 'HomeView',
