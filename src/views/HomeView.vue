@@ -2,7 +2,7 @@
 
 <template>
   <div class="container">
-    
+    <h1>button-to-send-review branch</h1>
       
         <!-- <vue-flip v-model="token">
           <template v-slot:front>
@@ -22,7 +22,7 @@
 
       
       
-        <el-menu @open="onChange" :unique-opened="onlyOneOpened">
+        <el-menu :unique-opened="onlyOneOpened">
           <el-submenu  :class="d.answers_set.length == 0?clase['red']:clase[d.topic.id]" :index="item.toString()" v-for="(d, item) in data" :key="item">
             <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Lion_waiting_in_Namibia.jpg/1200px-Lion_waiting_in_Namibia.jpg" width="250px" height="250px">
             <template slot="title"><el-icon class="el-icon-question"></el-icon>{{ item }} - {{d.ability}} - {{ d.topic.topic }} - {{d.n_times_reviewed}}</template>
