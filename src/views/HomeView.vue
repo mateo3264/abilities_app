@@ -31,7 +31,7 @@
                 <el-menu-item  v-for="line, sub2item in answer.answer" :key=sub2item :index="sub_item.toString()">
                   <pre >{{ line }}</pre>
                 </el-menu-item>
-              <el-slider v-model="dummySliderVar"></el-slider>
+              <el-slider v-model="sliderDifficulty" :min="minDifficulty" :max="maxDifficulty"></el-slider>
               <el-button @click="onChange(item)">Enviar Repaso de Habilidad</el-button>
               </el-menu-item-group>
               
@@ -42,6 +42,7 @@
         </el-input>
         <el-input type="textarea" :rows="5" placeholder="Escribe la respuesta" v-model="answer" style="margin-top:20px">
         </el-input>
+        <el-slider v-model="sliderDifficulty" show-stops :min="minDifficulty" :max="maxDifficulty"></el-slider>
         <el-select type="text" placeholder="Selecciona" v-model="selection" style="margin-top:20px">
           <el-option v-for="topic, item in topics" :label="topic.topic" :key="item" :value="topic.id"></el-option>
           
@@ -122,7 +123,9 @@ export default {
       MinimumAbilitiesReviewedPerDay:null,
       abilitiesReviewedToday:0,
       elementsReviewed:{},
-      dummySliderVar:60,
+      sliderDifficulty:5,
+      minDifficulty:0,
+      maxDifficulty:10,
 
       
       
@@ -141,12 +144,18 @@ export default {
       console.log(this.data[element])
       console.log('element')
       console.log(element)
+      console.log('sliderDifficulty')
+      console.log(this.sliderDifficulty)
+      this.data[element].difficulty = this.sliderDifficulty
+      console.log('this.data[element]')
+      console.log(this.data[element])
       // console.log(this.data[element].n_times_reviewed)
       //console.log(this.data[element])
       axios.post('http://127.0.0.1:8000/send/',this.data[element])
       .then(response=>{
         // console.log('respuseta after change')
         console.log(response)
+        this.sliderDifficulty = 5
         
         //TODO: colocarlo al inicio de todo
         if (this.abilitiesReviewedToday >= this.MinimumAbilitiesReviewedPerDay){
@@ -159,12 +168,13 @@ export default {
       ability:this.ability,
       answer:this.answer,
       selection:this.selection,
+      difficulty:this.sliderDifficulty
 
       
     }
     
-    // console.log('what is sent')
-    // console.log(params)
+    console.log('what is sent')
+    console.log(params)
       axios.post('http://127.0.0.1:8000/sendAbility/', params)
     .then(response=>{
       // console.log('response to sendAbility')
