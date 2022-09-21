@@ -24,7 +24,7 @@
       
         <el-menu @open="onChange" :unique-opened="onlyOneOpened">
           <el-submenu  :class="d.answers_set.length == 0?clase['red']:clase[d.topic.id]" :index="item.toString()" v-for="(d, item) in data" :key="item">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Lion_waiting_in_Namibia.jpg/1200px-Lion_waiting_in_Namibia.jpg" width="250px" height="250px">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Lion_waiting_in_Namibia.jpg/1200px-Lion_waiting_in_Namibia.jpg" width="250px" height="250px" />
             <template slot="title"><el-icon class="el-icon-question"></el-icon>{{ item }} - {{d.ability}} - {{ d.topic.topic }} - {{d.n_times_reviewed}}</template>
               
 
@@ -40,19 +40,33 @@
           </el-submenu>
         </el-menu>
         <div v-if="showInput">
-        <el-input type="text" placeholder="Escribe la habilidad" v-model="ability" style="margin-top:20px">
-        </el-input>
-        <el-input type="textarea" :rows="5" placeholder="Escribe la respuesta" v-model="answer" style="margin-top:20px">
-        </el-input>
-        <el-select multiple filterable type="text" placeholder="Selecciona" v-model="selection" style="margin-top:20px">
-          <el-option v-for="topic, item in topics" :label="topic.topic" :key="item" :value="topic.id"></el-option>
-          
-        </el-select>
-        <el-button class="primary" @click="sendData">Enviar</el-button>
+          <h3>Responder intraverbalmente</h3>
+          <el-input type="text" placeholder="Escribe la habilidad" v-model="ability" style="margin-top:20px">
+          </el-input>
+          <el-input type="textarea" :rows="5" placeholder="Escribe la respuesta" v-model="answer" style="margin-top:20px">
+          </el-input>
+        
         </div>
         <div v-else>
-          <h3>Por favor repasa x número de habilidades antes de introducir nuevas</h3>
+          <h3>Tactear Imagen</h3>
+          <el-input placeholder="Escribe la url de la imagen" type="url" v-model="url">
+            <template slot="prepend">URL:</template>
+          </el-input>
+          <el-input type="text" placeholder="Escribe la respuesta verbal a condicionar"></el-input>
         </div>
+        <div v-if="true">
+
+          <el-select multiple filterable type="text" placeholder="Selecciona" v-model="selection" style="margin-top:20px">
+            <el-option v-for="topic, item in topics" :label="topic.topic" :key="item" :value="topic.id"></el-option>
+            
+          </el-select>
+        <el-button class="primary" @click="sendData">Enviar</el-button>
+        </div>
+        
+        <el-button-group>
+          <el-button @click="showInput=false" icon="el-icon-arrow-left">Izquierda</el-button>
+          <el-button  @click="showInput=true">Derecha<i class="el-icon-arrow-right"></i></el-button>
+        </el-button-group>
       
   
 
@@ -123,6 +137,7 @@ export default {
       abilitiesReviewedToday:0,
       elementsReviewed:{},
       dummySliderVar:60,
+      url:'',
 
       
       
