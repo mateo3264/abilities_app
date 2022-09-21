@@ -31,7 +31,7 @@
                 <el-menu-item  v-for="line, sub2item in answer.answer" :key=sub2item :index="sub_item.toString()">
                   <pre >{{ line }}</pre>
                 </el-menu-item>
-              <el-slider v-model="sliderDifficulty" :min="minDifficulty" :max="maxDifficulty"></el-slider>
+              <el-slider v-model="sliderDifficultyEdit" :min="minDifficulty" :max="maxDifficulty"></el-slider>
               <el-button @click="onChange(item)">Enviar Repaso de Habilidad</el-button>
               </el-menu-item-group>
               
@@ -123,6 +123,7 @@ export default {
       MinimumAbilitiesReviewedPerDay:null,
       abilitiesReviewedToday:0,
       elementsReviewed:{},
+      sliderDifficultyEdit:5,
       sliderDifficulty:5,
       minDifficulty:0,
       maxDifficulty:10,
@@ -144,9 +145,9 @@ export default {
       console.log(this.data[element])
       console.log('element')
       console.log(element)
-      console.log('sliderDifficulty')
-      console.log(this.sliderDifficulty)
-      this.data[element].difficulty = this.sliderDifficulty
+      console.log('sliderDifficultyEdit')
+      console.log(this.sliderDifficultyEdit)
+      this.data[element].difficulty = this.sliderDifficultyEdit
       console.log('this.data[element]')
       console.log(this.data[element])
       // console.log(this.data[element].n_times_reviewed)
@@ -155,7 +156,7 @@ export default {
       .then(response=>{
         // console.log('respuseta after change')
         console.log(response)
-        this.sliderDifficulty = 5
+        this.sliderDifficultyEdit = 5
         
         //TODO: colocarlo al inicio de todo
         if (this.abilitiesReviewedToday >= this.MinimumAbilitiesReviewedPerDay){
