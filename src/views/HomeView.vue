@@ -24,14 +24,14 @@
         <el-menu :unique-opened="onlyOneOpened">
           <el-submenu  :class="d.answers_set.length == 0?clase['red']:clase[d.topic.id]" :index="item.toString()" v-for="(d, item) in data" :key="item">
             <!-- <about-component /> -->
-            <template slot="title"><el-icon class="el-icon-question"></el-icon>{{ item }} - {{d.ability}} - {{ d.topic.topic }} - {{d.n_times_reviewed}}</template>
+            <template slot="title"><el-icon class="el-icon-question"></el-icon>{{ item }} - {{d.ability}} - {{ d.topic.topic }} - {{d.n_times_reviewed}} - {{ d.difficulty }} - {{ d.type.type }}</template>
               
 
               <el-menu-item-group v-for="(answer,sub_item) in d.answers_set" :key="sub_item">
                 <el-menu-item  v-for="line, sub2item in answer.answer" :key=sub2item :index="sub_item.toString()">
                   <pre >{{ line }}</pre>
                 </el-menu-item>
-              <el-slider v-model="dummySliderVar"></el-slider>
+              <el-slider show-stops v-model="sliderDifficultyEdit" :min="minDifficulty" :max="maxDifficulty"></el-slider>
               <el-button @click="onChange(item)">Enviar Repaso de Habilidad</el-button>
               </el-menu-item-group>
               
@@ -42,6 +42,7 @@
         </el-input>
         <el-input type="textarea" :rows="5" placeholder="Escribe la respuesta" v-model="answer" style="margin-top:20px">
         </el-input>
+        <el-slider v-model="sliderDifficulty" show-stops :min="minDifficulty" :max="maxDifficulty"></el-slider>
         <el-select type="text" placeholder="Selecciona" v-model="selection" style="margin-top:20px">
           <el-option v-for="topic, item in topics" :label="topic.topic" :key="item" :value="topic.id"></el-option>
           
@@ -122,7 +123,10 @@ export default {
       MinimumAbilitiesReviewedPerDay:null,
       abilitiesReviewedToday:0,
       elementsReviewed:{},
-      dummySliderVar:60,
+      sliderDifficultyEdit:5,
+      sliderDifficulty:5,
+      minDifficulty:0,
+      maxDifficulty:10,
 
       
       
@@ -141,12 +145,18 @@ export default {
       console.log(this.data[element])
       console.log('element')
       console.log(element)
+      console.log('sliderDifficultyEdit')
+      console.log(this.sliderDifficultyEdit)
+      this.data[element].difficulty = this.sliderDifficultyEdit
+      console.log('this.data[element]')
+      console.log(this.data[element])
       // console.log(this.data[element].n_times_reviewed)
       //console.log(this.data[element])
       axios.post('http://127.0.0.1:8000/send/',this.data[element])
       .then(response=>{
         // console.log('respuseta after change')
         console.log(response)
+        this.sliderDifficultyEdit = 5
         
         //TODO: colocarlo al inicio de todo
         if (this.abilitiesReviewedToday >= this.MinimumAbilitiesReviewedPerDay){
@@ -159,12 +169,13 @@ export default {
       ability:this.ability,
       answer:this.answer,
       selection:this.selection,
+      difficulty:this.sliderDifficulty
 
       
     }
     
-    // console.log('what is sent')
-    // console.log(params)
+    console.log('what is sent')
+    console.log(params)
       axios.post('http://127.0.0.1:8000/sendAbility/', params)
     .then(response=>{
       // console.log('response to sendAbility')
@@ -207,11 +218,10 @@ export default {
             }
           }
           
-        console.log(count, el.answers_set[0].answer)
-        console.log(count)
-        el.answers_set[0].answer.forEach(it=>{
-          console.log(it)
-        })
+
+        // el.answers_set[0].answer.forEach(it=>{
+        //   console.log(it)
+        // })
         } catch(error){
              
           console.log(error)
@@ -219,9 +229,9 @@ export default {
         count++
       })
       this.data = result.data
-      console.log('this.$el')
-      console.log(this.$el)
-      // console.log(this.data)
+
+      console.log('this.data')
+      console.log(this.data)
       // console.log('this.topics')
       // console.log(this.topics)
     })

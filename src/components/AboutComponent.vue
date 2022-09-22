@@ -104,8 +104,12 @@ export default {
               //console.log(typeof(item['created_at__date']))
               console.log(hoy.subtract(4, 'days').format('YYYY-MM-DD')===moment(item['created_at__date']).format('YYYY-MM-DD'))
               
-              this.line.series[0].data.push({'name':item['created_at__date'], 'value':item['dcount']})
-  
+              this.line.series[0].data.push({
+                name:item['created_at__date'], 
+                value:item['dcount'], 
+                
+                })
+        
               //sum_total_abilities_by_day += item['dcount']
             //this.line.series[1].data.push({'name':item['created_at__date'], 'value':sum_total_abilities_by_day})
             this.line.xAxis.data.push(item['created_at__date'])
@@ -182,17 +186,17 @@ export default {
           //nombre = this.topics_id_and_names.some(obj=>{
           var nombre = ''
           this.topics_id_and_names.forEach(obj=>{
-            console.log('queso')
-            console.log(el)
-            console.log(obj)
+            //console.log('queso')
+            //console.log(el)
+            //console.log(obj)
             if (el.topic === Number(obj.id)){
-              console.log('el y topic')
-              console.log(el)
-              console.log(obj)
+              // console.log('el y topic')
+              // console.log(el)
+              // console.log(obj)
               
               nombre = obj.topic
-              console.log('nombre in')
-              console.log(obj.topic)
+              // console.log('nombre in')
+              // console.log(obj.topic)
               }
             
           })
@@ -202,13 +206,14 @@ export default {
           topic_names.push({name:nombre, max:100})
           
         })
-        console.log('topic_names')
-        console.log(topic_names)
+        // console.log('topic_names')
+        // console.log(topic_names)
         this.topic_list.push(1)
         console.log('this.topic_list')
+        console.log(this.topic_list)
         this.dataBJ = [this.topic_list,]
         console.log(this.dataBJ)
-        this.radar.series[0].data = [[93, 33, 4, 17, 38, 29, 5, 14, 29, 20, 15, 9, 5, 3, 18, 43, 11, 11, 2, 20, 9, 11, 7, 37, 2, 3, 1]]//this.dataBJ//this.dataBJ
+        this.radar.series[0].data.push({value:this.topic_list})//this.dataBJ//this.dataBJ
         //this.radar.series[0].data.push(this.dataBJ)
         this.radar.radar.indicator = topic_names
         this.radar.series[0].lineStyle = this.lineStyle
@@ -293,6 +298,7 @@ export default {
             type: "pie",
             radius: "55%",
             center: ["50%", "60%"],
+            
             data: [
               { value: 335, name: "one" },
               { value: 310, name: "two" },
@@ -468,6 +474,9 @@ export default {
       },
     radar:
        {
+        tooltip: {
+          trigger: 'axis'
+        },
         backgroundColor: '#161627',
         title: {
           text: 'Mateo Abilities',
@@ -488,6 +497,7 @@ export default {
         },
         
         radar: {
+          
           indicator: [
             // { name: 'Política', max: 300 },
             // { name: 'Economía', max: 250 },
@@ -528,6 +538,10 @@ export default {
           {
             name: 'Beijing',
             type: 'radar',
+            tooltip:{
+              trigger:'item',
+              formatter:'{c}'
+            },
             data: [],
             lineStyle: [],
             symbol: 'none',
