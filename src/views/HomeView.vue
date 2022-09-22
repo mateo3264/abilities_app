@@ -24,14 +24,14 @@
         <el-menu :unique-opened="onlyOneOpened">
           <el-submenu  :class="d.answers_set.length == 0?clase['red']:clase[d.topic.id]" :index="item.toString()" v-for="(d, item) in data" :key="item">
             <!-- <about-component /> -->
-            <template slot="title"><el-icon class="el-icon-question"></el-icon>{{ item }} - {{d.ability}} - {{ d.topic.topic }} - {{d.n_times_reviewed}} - {{ d.difficulty }}</template>
+            <template slot="title"><el-icon class="el-icon-question"></el-icon>{{ item }} - {{d.ability}} - {{ d.topic.topic }} - {{d.n_times_reviewed}} - {{ d.difficulty }} - {{ d.type.type }}</template>
               
 
               <el-menu-item-group v-for="(answer,sub_item) in d.answers_set" :key="sub_item">
                 <el-menu-item  v-for="line, sub2item in answer.answer" :key=sub2item :index="sub_item.toString()">
                   <pre >{{ line }}</pre>
                 </el-menu-item>
-              <el-slider v-model="sliderDifficultyEdit" :min="minDifficulty" :max="maxDifficulty"></el-slider>
+              <el-slider show-stops v-model="sliderDifficultyEdit" :min="minDifficulty" :max="maxDifficulty"></el-slider>
               <el-button @click="onChange(item)">Enviar Repaso de Habilidad</el-button>
               </el-menu-item-group>
               
@@ -219,9 +219,9 @@ export default {
           }
           
 
-        el.answers_set[0].answer.forEach(it=>{
-          console.log(it)
-        })
+        // el.answers_set[0].answer.forEach(it=>{
+        //   console.log(it)
+        // })
         } catch(error){
              
           console.log(error)
