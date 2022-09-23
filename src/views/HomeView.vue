@@ -1,31 +1,12 @@
 
 
 <template>
-  <div class="container">
-      
-        <!-- <vue-flip v-model="token">
-          <template v-slot:front>
-            <img src="https://m.media-amazon.com/images/I/71dg9J4CtvL._AC_SX679_.jpg" alt="">
-          </template>
-          <template v-slot:back>
-            <img src="https://m.media-amazon.com/images/I/71dg9J4CtvL._AC_SX679_.jpg" alt="">
-            
-          </template>
-        </vue-flip> 
-    -->
-
-    
-        <!-- "d.topic.id == '2' ?clase:else_clase"  -->
-      <!-- <el-menu :unique-opened="true"> --> 
-
-
-      
-      
+  <div class="container"> 
         <el-menu :unique-opened="onlyOneOpened">
           <el-submenu  :class="d.answers_set.length == 0?clase['red']:clase[d.topic.id]" :index="item.toString()" v-for="(d, item) in data" :key="item">
-            <!-- <about-component /> -->
             <template slot="title"><el-icon class="el-icon-question"></el-icon>{{ item }} - {{d.ability}} - {{ d.topic.topic }} - {{d.n_times_reviewed}} - {{ d.difficulty }} - {{ d.type.type }}</template>
               
+            <div v-if="d.type.type == types_of_abilities[0]">
 
               <el-menu-item-group v-for="(answer,sub_item) in d.answers_set" :key="sub_item">
                 <el-menu-item  v-for="line, sub2item in answer.answer" :key=sub2item :index="sub_item.toString()">
@@ -34,56 +15,54 @@
               <el-slider show-stops v-model="sliderDifficultyEdit" :min="minDifficulty" :max="maxDifficulty"></el-slider>
               <el-button @click="onChange(item)">Enviar Repaso de Habilidad</el-button>
               </el-menu-item-group>
+            </div>
+            <div v-else-if="d.type.type == types_of_abilities[1]">
+              <el-image :src="d.ability" fit="scale-down"></el-image>
+              <el-menu>
+                <el-submenu>
+                  <template slot="title"><el-icon class="el-icon-question"></el-icon>Respuesta:</template>
+                  <el-menu-item>
+
+                    {{d.answers_set[0].answer[0]}}
+                  </el-menu-item>
+                </el-submenu>
+                
+                <el-slider show-stops v-model="sliderDifficultyEdit" :min="minDifficulty" :max="maxDifficulty"></el-slider>
+                <el-button @click="onChange(item)">Enviar Repaso de Habilidad</el-button>
+              </el-menu>
+
+            </div>
               
           </el-submenu>
         </el-menu>
-        <div v-if="showInput">
-        <el-input type="text" placeholder="Escribe la habilidad" v-model="ability" style="margin-top:20px">
-        </el-input>
-        <el-input type="textarea" :rows="5" placeholder="Escribe la respuesta" v-model="answer" style="margin-top:20px">
-        </el-input>
-        <el-slider v-model="sliderDifficulty" show-stops :min="minDifficulty" :max="maxDifficulty"></el-slider>
-        <el-select type="text" placeholder="Selecciona" v-model="selection" style="margin-top:20px">
-          <el-option v-for="topic, item in topics" :label="topic.topic" :key="item" :value="topic.id"></el-option>
-          
-        </el-select>
+        <div v-if="showInput == 0">
+          <h3>Responder intraverbalmente</h3>
+          <el-input type="text" placeholder="Escribe la habilidad" v-model="ability" style="margin-top:20px">
+          </el-input>
+          <el-input type="textarea" :rows="5" placeholder="Escribe la respuesta" v-model="answer" style="margin-top:20px">
+          </el-input>
+        
+        </div>
+        <div v-else-if="showInput == 1">
+          <h3>Tactear Imagen</h3>
+          <el-input placeholder="Escribe la url de la imagen" type="url" v-model="url">
+            <template slot="prepend">URL:</template>
+          </el-input>
+          <el-input type="text" placeholder="Escribe la respuesta verbal a condicionar"></el-input>
+        </div>
+        <div>
+
+          <el-select multiple filterable type="text" placeholder="Selecciona" v-model="selection" style="margin-top:20px">
+            <el-option v-for="topic, item in topics" :label="topic.topic" :key="item" :value="topic.id"></el-option>
+            
+          </el-select>
         <el-button class="primary" @click="sendData">Enviar</el-button>
         </div>
-        <div v-else>
-          <h3>Por favor repasa x número de habilidades antes de introducir nuevas</h3>
-        </div>
-      
-  
-
-
-
-      <!-- <el-collapse v-model="activeName" accordion @change="onChange" >
-        <el-collapse-item  :class="d.answers_set.length == 0?clase['red']:clase[d.topic.id]" :name="item.toString()" v-for="(d, item) in data" :key="item" :title="d.ability">
-          <div  v-for="answer,subItem in d.answers_set" :key="subItem">
-            
-            <div  v-for="line, sub2Item in answer.answer" :key="sub2Item">
-              <pre >
-                {{ line }}
-              </pre>
-            </div>
-            </div>
-        </el-collapse-item>
-      </el-collapse> -->
-          <!-- <template slot="title"><el-icon class="el-icon-question"></el-icon>{{ item }} - {{d.ability}} - {{ d.topic.topic }}</template>
-            <el-menu-item-group v-for="(answer,sub_item) in d.answers_set" :key="sub_item">
-              <el-menu-item :index="sub_item.toString()"><pre>{{ answer.answer }}</pre></el-menu-item>
-              <el-menu-item :index="sub_item.toString()">
-                <ul>
-                  <li v-for="line, sub2key in answer.answer" :key="sub2key">
-                    {{ line }}
-                  </li>
-
-                </ul>
-                </el-menu-item>
-            </el-menu-item-group>
-            
-        </el-submenu>
-      </el-menu> -->
+        
+        <el-button-group>
+          <el-button @click="decrementShowInput" icon="el-icon-arrow-left">{{ this.types_of_abilities[showInput - 1]}}</el-button>
+          <el-button  @click="incrementShowInput">{{ this.types_of_abilities[showInput + 1]}}<i class="el-icon-arrow-right"></i></el-button>
+        </el-button-group>
   </div>
   
 </template>
@@ -119,7 +98,7 @@ export default {
       topics:[],
       topics_list:[],
       token:true,
-      showInput:false,
+      showInput:0,
       MinimumAbilitiesReviewedPerDay:null,
       abilitiesReviewedToday:0,
       elementsReviewed:{},
@@ -127,12 +106,19 @@ export default {
       sliderDifficulty:5,
       minDifficulty:0,
       maxDifficulty:10,
+      types_of_abilities:[],
 
       
       
     }
   },
   methods:{
+    decrementShowInput(){
+      if (this.showInput > 0) this.showInput--
+    },
+    incrementShowInput(){
+      if (this.showInput < this.types_of_abilities.length - 1) this.showInput++
+    },
     onChange(element){
       // console.log('algo cambió')
       // console.log('element')
@@ -252,12 +238,30 @@ export default {
       this.MinimumAbilitiesReviewedPerDay = response.data.minimum_abilities_reviewed_per_day
       // console.log(this.MinimumAbilitiesReviewedPerDay)
     })
+
+    axios.get('http://127.0.0.1:8000/types-of-abilities')
+    .then(response =>{
+      response.data.forEach(item=>{
+        this.types_of_abilities.push(item.type)
+      })
+      
+      console.log('types of abilities')
+      console.log(this.types_of_abilities)
+    })
     
   }
 }
 </script>
 
 <style scoped>
+img{
+  width:700px;
+  display:block;
+  margin-left:auto;
+  margin-right:auto;
+  width:50%;
+  
+}
 ul{
   height:400px;
   overflow:auto;
