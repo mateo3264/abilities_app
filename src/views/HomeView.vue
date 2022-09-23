@@ -154,7 +154,7 @@ export default {
       const params = {
       ability:this.ability,
       answer:this.answer,
-      selection:this.selection,
+      selection:this.selection[0],
       difficulty:this.sliderDifficulty
 
       
