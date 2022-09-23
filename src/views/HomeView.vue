@@ -119,7 +119,7 @@ export default {
       topics:[],
       topics_list:[],
       token:true,
-      showInput:false,
+      showInput:0,
       MinimumAbilitiesReviewedPerDay:null,
       abilitiesReviewedToday:0,
       elementsReviewed:{},
@@ -127,12 +127,19 @@ export default {
       sliderDifficulty:5,
       minDifficulty:0,
       maxDifficulty:10,
+      types_of_abilities:[],
 
       
       
     }
   },
   methods:{
+    decrementShowInput(){
+      if (this.showInput > 0) this.showInput--
+    },
+    incrementShowInput(){
+      if (this.showInput < this.types_of_abilities.length - 1) this.showInput++
+    },
     onChange(element){
       // console.log('algo cambió')
       // console.log('element')
@@ -251,6 +258,16 @@ export default {
       // console.log(response.data)
       this.MinimumAbilitiesReviewedPerDay = response.data.minimum_abilities_reviewed_per_day
       // console.log(this.MinimumAbilitiesReviewedPerDay)
+    })
+
+    axios.get('http://127.0.0.1:8000/types-of-abilities')
+    .then(response =>{
+      response.data.forEach(item=>{
+        this.types_of_abilities.push(item)
+      })
+      
+      console.log('types of abilities')
+      console.log(this.types_of_abilities)
     })
     
   }
