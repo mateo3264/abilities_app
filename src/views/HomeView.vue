@@ -21,7 +21,10 @@
               <el-menu>
                 <el-submenu>
                   <template slot="title"><el-icon class="el-icon-question"></el-icon>Respuesta:</template>
-                  {{d.answers_set[0].answer[0]}}
+                  <el-menu-item>
+
+                    {{d.answers_set[0].answer[0]}}
+                  </el-menu-item>
                 </el-submenu>
                 
                 <el-slider show-stops v-model="sliderDifficultyEdit" :min="minDifficulty" :max="maxDifficulty"></el-slider>
