@@ -4,7 +4,8 @@
   <div class="container"> 
         <el-menu :unique-opened="onlyOneOpened">
           <el-submenu  :class="d.answers_set.length == 0?clase['red']:clase[d.topic.id]" :index="item.toString()" v-for="(d, item) in data" :key="item">
-            <template slot="title"><el-icon class="el-icon-question"></el-icon>{{ item }} - {{d.ability}} - {{ d.topic.topic }} - {{d.n_times_reviewed}} - {{ d.difficulty }} - {{ d.type.type }}</template>
+            <template v-if="d.type.id == 1" slot="title"><el-icon class="el-icon-question"></el-icon>{{ item }} - {{d.ability}} - {{ d.topic.topic }} - {{d.n_times_reviewed}} - {{ d.difficulty }} - {{ d.type.type }}</template>
+            <template v-else-if="d.type.id == 2" slot="title"><el-icon class="el-icon-question"></el-icon>{{ item }} - TACTEO :D - {{ d.topic.topic }} - {{d.n_times_reviewed}} - {{ d.difficulty }} - {{ d.type.type }}</template>
               
             <div v-if="d.type.type == types_of_abilities[0]">
 
@@ -35,7 +36,7 @@
               
           </el-submenu>
         </el-menu>
-        <div v-if="showInput == 0">
+        <div v-if="showInput == 1">
           <h3>Responder intraverbalmente</h3>
           <el-input type="text" placeholder="Escribe la habilidad" v-model="ability" style="margin-top:20px">
           </el-input>
@@ -43,12 +44,12 @@
           </el-input>
         
         </div>
-        <div v-else-if="showInput == 1">
+        <div v-else-if="showInput == 2">
           <h3>Tactear Imagen</h3>
-          <el-input placeholder="Escribe la url de la imagen" type="url" v-model="url">
+          <el-input placeholder="Escribe la url de la imagen" type="url" v-model="ability">
             <template slot="prepend">URL:</template>
           </el-input>
-          <el-input type="text" placeholder="Escribe la respuesta verbal a condicionar"></el-input>
+          <el-input type="text" placeholder="Escribe la respuesta verbal a condicionar" v-model="answer"></el-input>
         </div>
         <div>
 
@@ -60,8 +61,8 @@
         </div>
         
         <el-button-group>
-          <el-button @click="decrementShowInput" icon="el-icon-arrow-left">{{ this.types_of_abilities[showInput - 1]}}</el-button>
-          <el-button  @click="incrementShowInput">{{ this.types_of_abilities[showInput + 1]}}<i class="el-icon-arrow-right"></i></el-button>
+          <el-button @click="decrementShowInput" icon="el-icon-arrow-left">{{ this.types_of_abilities[showInput - 2]}}</el-button>
+          <el-button  @click="incrementShowInput">{{ this.types_of_abilities[showInput]}}<i class="el-icon-arrow-right"></i></el-button>
         </el-button-group>
   </div>
   
@@ -98,7 +99,7 @@ export default {
       topics:[],
       topics_list:[],
       token:true,
-      showInput:0,
+      showInput:1,
       MinimumAbilitiesReviewedPerDay:null,
       abilitiesReviewedToday:0,
       elementsReviewed:{},
@@ -107,6 +108,7 @@ export default {
       minDifficulty:0,
       maxDifficulty:10,
       types_of_abilities:[],
+      urlInput:'',
 
       
       
@@ -114,10 +116,10 @@ export default {
   },
   methods:{
     decrementShowInput(){
-      if (this.showInput > 0) this.showInput--
+      if (this.showInput > 1) this.showInput--
     },
     incrementShowInput(){
-      if (this.showInput < this.types_of_abilities.length - 1) this.showInput++
+      if (this.showInput < this.types_of_abilities.length) this.showInput++
     },
     onChange(element){
       // console.log('algo cambió')
@@ -134,6 +136,7 @@ export default {
       console.log('sliderDifficultyEdit')
       console.log(this.sliderDifficultyEdit)
       this.data[element].difficulty = this.sliderDifficultyEdit
+      
       console.log('this.data[element]')
       console.log(this.data[element])
       // console.log(this.data[element].n_times_reviewed)
@@ -155,7 +158,8 @@ export default {
       ability:this.ability,
       answer:this.answer,
       selection:this.selection[0],
-      difficulty:this.sliderDifficulty
+      difficulty:this.sliderDifficulty,
+      type:this.showInput,
 
       
     }
