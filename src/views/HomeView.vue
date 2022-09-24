@@ -3,18 +3,23 @@
 <template>
   <div class="container"> 
         <el-menu :unique-opened="onlyOneOpened">
+            
           <el-submenu  :class="d.answers_set.length == 0?clase['red']:clase[d.topic.id]" :index="item.toString()" v-for="(d, item) in data" :key="item">
-            <template v-if="d.type.id == 1" slot="title"><el-icon class="el-icon-question"></el-icon>{{ item }} - {{d.ability}} - {{ d.topic.topic }} - {{d.n_times_reviewed}} - {{ d.difficulty }} - {{ d.type.type }}</template>
-            <template v-else-if="d.type.id == 2" slot="title"><el-icon class="el-icon-question"></el-icon>{{ item }} - TACTEO :D - {{ d.topic.topic }} - {{d.n_times_reviewed}} - {{ d.difficulty }} - {{ d.type.type }}</template>
-              
+            <div>
+             
+            </div>
+            <template v-if="d.type.id == 1" slot="title"><el-icon class="el-icon-question"></el-icon>{{ item }} - {{d.ability}} - {{ d.topic.topic }} - {{d.n_times_reviewed}} - {{ d.difficulty }} - {{ d.type.type }} <el-button class="el-icon-edit" circle @click="editPage(d, item)"></el-button></template>
+            <template v-else-if="d.type.id == 2" slot="title"><el-icon class="el-icon-question"></el-icon>{{ item }} - TACTEO :D - {{ d.topic.topic }} - {{d.n_times_reviewed}} - {{ d.difficulty }} - {{ d.type.type }} <el-button class="el-icon-edit" circle @click="editPage(d, item)"></el-button></template>
+            
             <div v-if="d.type.type == types_of_abilities[0]">
-
+              
               <el-menu-item-group v-for="(answer,sub_item) in d.answers_set" :key="sub_item">
                 <el-menu-item  v-for="line, sub2item in answer.answer" :key=sub2item :index="sub_item.toString()">
                   <pre >{{ line }}</pre>
                 </el-menu-item>
+              
               <el-slider show-stops v-model="sliderDifficultyEdit" :min="minDifficulty" :max="maxDifficulty"></el-slider>
-              <el-button @click="onChange(item)">Enviar Repaso de Habilidad</el-button>
+              <el-button @click="onChange({item:item, edit:false})">Enviar Repaso de Habilidad</el-button>
               </el-menu-item-group>
             </div>
             <div v-else-if="d.type.type == types_of_abilities[1]">
@@ -29,7 +34,7 @@
                 </el-submenu>
                 
                 <el-slider show-stops v-model="sliderDifficultyEdit" :min="minDifficulty" :max="maxDifficulty"></el-slider>
-                <el-button @click="onChange(item)">Enviar Repaso de Habilidad</el-button>
+                <el-button @click="onChange({item:item, edit:false})">Enviar Repaso de Habilidad</el-button>
               </el-menu>
 
             </div>
@@ -73,6 +78,8 @@
 //import VueFlip from 'vue-flip'
 //import AboutComponent from '@/components/AboutComponent'
 import axios from 'axios'
+import { mapState, mapActions } from 'vuex'
+
 export default {
   name: 'HomeView',
   components: {
@@ -81,7 +88,7 @@ export default {
   },
   data(){
     return{
-      data:null,
+      //data:null,
       activeName:'1',
       clase:{
         1:'otro',
@@ -93,8 +100,8 @@ export default {
         'red':'red',
       },
       onlyOneOpened:true,
-      ability:'',
-      answer:'',
+      // ability:'',
+      // answer:'',
       selection:'',
       topics:[],
       topics_list:[],
@@ -114,45 +121,83 @@ export default {
       
     }
   },
+  computed:{
+            ...mapState(['item']),
+            data:{
+              get(){
+                return this.$store.state.data
+              },
+              set(value){
+                this.$store.commit('updateData',value)
+              }
+            },
+            ability:{
+                get(){
+                    return this.$store.state.ability
+                },
+                set(value){
+                    this.$store.commit('updateAbility', value)
+                }
+            },
+            answer:{
+                get(){
+                    return this.$store.state.answer
+                },
+                set(value){
+                    this.$store.commit('updateAnswer', value)
+                }
+            }
+  },
   methods:{
+    ...mapActions(['onChange']),
+    editPage(d, item){
+      console.log('d.answers_set.answer')
+      console.log(d.answers_set.answer)
+      console.log('item')
+      console.log(item)
+      this.$store.state.item = item
+      this.$store.commit('updateAbility', d.ability)
+      this.$store.commit('updateAnswer', d.answers_set[0].answer[0])
+      this.$router.push('/edit-page')
+    },
     decrementShowInput(){
       if (this.showInput > 1) this.showInput--
     },
     incrementShowInput(){
       if (this.showInput < this.types_of_abilities.length) this.showInput++
     },
-    onChange(element){
-      // console.log('algo cambió')
-      // console.log('element')
-      // console.log(element)
-      // console.log('Mueche')
-      this.data[element].n_times_reviewed += 1
-      //if ()
-      //this.abilitiesReviewedToday += 1
-      console.log('this.data[element]')
-      console.log(this.data[element])
-      console.log('element')
-      console.log(element)
-      console.log('sliderDifficultyEdit')
-      console.log(this.sliderDifficultyEdit)
-      this.data[element].difficulty = this.sliderDifficultyEdit
+    // onChange(element){
+    //   // console.log('algo cambió')
+    //   // console.log('element')
+    //   // console.log(element)
+    //   // console.log('Mueche')
+    //   this.data[element].n_times_reviewed += 1
+    //   //if ()
+    //   //this.abilitiesReviewedToday += 1
+    //   console.log('this.data[element]')
+    //   console.log(this.data[element])
+    //   console.log('element')
+    //   console.log(element)
+    //   console.log('sliderDifficultyEdit')
+    //   console.log(this.sliderDifficultyEdit)
+    //   this.data[element].difficulty = this.sliderDifficultyEdit
       
-      console.log('this.data[element]')
-      console.log(this.data[element])
-      // console.log(this.data[element].n_times_reviewed)
-      //console.log(this.data[element])
-      axios.post('http://127.0.0.1:8000/send/',this.data[element])
-      .then(response=>{
-        // console.log('respuseta after change')
-        console.log(response)
-        this.sliderDifficultyEdit = 5
+    //   console.log('this.data[element]')
+    //   console.log(this.data[element])
+    //   // console.log(this.data[element].n_times_reviewed)
+    //   //console.log(this.data[element])
+    //   axios.post('http://127.0.0.1:8000/send/',this.data[element])
+    //   .then(response=>{
+    //     // console.log('respuseta after change')
+    //     console.log(response)
+    //     this.sliderDifficultyEdit = 5
         
-        //TODO: colocarlo al inicio de todo
-        if (this.abilitiesReviewedToday >= this.MinimumAbilitiesReviewedPerDay){
-        this.showInput = true
-      }
-      })
-    },
+    //     //TODO: colocarlo al inicio de todo
+    //   //   if (this.abilitiesReviewedToday >= this.MinimumAbilitiesReviewedPerDay){
+    //   //   this.showInput = true
+    //   // }
+    //   })
+    // },
     sendData(){
       const params = {
       ability:this.ability,
