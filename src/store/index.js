@@ -8,6 +8,7 @@ export default new Vuex.Store({
   state: {
     ability:'',
     answer:'',
+    answerCorrectness:5,
     data:null,
     sliderDifficultyEdit:5,
     item:null,
@@ -22,6 +23,9 @@ export default new Vuex.Store({
       },
       updateAnswer(state, payload) {
         state.answer = payload
+      },
+      updateAnswerCorrectness(state, payload){
+        state.answerCorrectness = payload
       },
       updateData(state, payload){
         state.data = payload
@@ -50,6 +54,7 @@ export default new Vuex.Store({
         console.log('this.state.data[obj.item]')
         console.log(this.state.data[obj.item])
         this.state.data[obj.item].n_times_reviewed += 1
+        this.state.data[obj.item].answer_correctness = this.state.answerCorrectness
       }else{
 
         this.state.data[obj.item].ability = this.state.ability
@@ -69,11 +74,13 @@ export default new Vuex.Store({
       .then(response=>{
         console.log('actions response')
         console.log(response)
-        this.state.sliderDifficultyEdit = 5
-        this.state.ability = ''
-        this.state.answer = ''
+        
 
       })
+      this.state.sliderDifficultyEdit = 5
+      this.state.ability = ''
+      this.state.answer = ''
+      this.state.answerCorrectness = 5
     }
   },
   modules: {

@@ -8,8 +8,8 @@
             <div>
              
             </div>
-            <template v-if="d.type.id == 1" slot="title"><el-icon class="el-icon-question"></el-icon>{{ item }} - {{d.ability}} - {{ d.topic.topic }} - {{d.n_times_reviewed}} - {{ d.difficulty }} - {{ d.type.type }} <el-button class="el-icon-edit" circle @click="editPage(d, item)"></el-button></template>
-            <template v-else-if="d.type.id == 2" slot="title"><el-icon class="el-icon-question"></el-icon>{{ item }} - TACTEO :D - {{ d.topic.topic }} - {{d.n_times_reviewed}} - {{ d.difficulty }} - {{ d.type.type }} <el-button class="el-icon-edit" circle @click="editPage(d, item)"></el-button></template>
+            <template v-if="d.type.id == 1" slot="title"><el-icon class="el-icon-question"></el-icon>{{ item }} - {{d.ability}} - {{ d.topic.topic }} - {{d.n_times_reviewed}} - {{ d.difficulty }} - {{ d.type.type }} <el-button type="primary" class="el-icon-edit" circle @click="editPage(d, item)"></el-button></template>
+            <template v-else-if="d.type.id == 2" slot="title"><el-icon class="el-icon-question"></el-icon>{{ item }} - TACTEO :D - {{ d.topic.topic }} - {{d.n_times_reviewed}} - {{ d.difficulty }} - {{ d.type.type }} - {{d.answer_correctness}}<el-button class="el-icon-edit" circle @click="editPage(d, item)"></el-button></template>
             
             <div v-if="d.type.type == types_of_abilities[0]">
               
@@ -17,8 +17,11 @@
                 <el-menu-item  v-for="line, sub2item in answer.answer" :key=sub2item :index="sub_item.toString()">
                   <pre >{{ line }}</pre>
                 </el-menu-item>
-              
+              Difficulty
               <el-slider show-stops v-model="sliderDifficultyEdit" :min="minDifficulty" :max="maxDifficulty"></el-slider>
+              <br>
+              Percentage of Correct Answer
+              <el-slider show-stops v-model="answerCorrectness" :min="minCorrectness" :max="maxCorrectness"></el-slider>
               <el-button @click="onChange({item:item, edit:false})">Enviar Repaso de Habilidad</el-button>
               </el-menu-item-group>
             </div>
@@ -114,6 +117,8 @@ export default {
       sliderDifficulty:5,
       minDifficulty:0,
       maxDifficulty:10,
+      minCorrectness:0,
+      maxCorrectness:10,
       types_of_abilities:[],
       urlInput:'',
 
@@ -146,18 +151,27 @@ export default {
                 set(value){
                     this.$store.commit('updateAnswer', value)
                 }
+            },
+            answerCorrectness:{
+              get(){
+                return this.$store.state.answerCorrectness
+              },
+              set(value){
+                this.$store.commit('updateAnswerCorrectness', value)
+              }
             }
   },
   methods:{
     ...mapActions(['onChange']),
     editPage(d, item){
-      console.log('d.answers_set.answer')
-      console.log(d.answers_set.answer)
+      console.log('EDIT')
+      console.log("d.answers_set[0].answer.join(\n)")
+      console.log(d.answers_set[0].answer.join('\n'))
       console.log('item')
       console.log(item)
       this.$store.state.item = item
       this.$store.commit('updateAbility', d.ability)
-      this.$store.commit('updateAnswer', d.answers_set[0].answer[0])
+      this.$store.commit('updateAnswer', d.answers_set[0].answer.join('\n'))
       this.$router.push('/edit-page')
     },
     decrementShowInput(){
@@ -288,7 +302,7 @@ export default {
       // console.log(this.MinimumAbilitiesReviewedPerDay)
     })
 
-    axios.get('http://127.0.0.1:8000/types-of-abilities')
+    axios.get('http://127.0.0.1:8000/types-of-abilities/')
     .then(response =>{
       response.data.forEach(item=>{
         this.types_of_abilities.push(item.type)
