@@ -9,7 +9,7 @@ export default new Vuex.Store({
     ability:'',
     answer:'',
     answerCorrectness:5,
-    data:null,
+    data:[],
     sliderDifficultyEdit:5,
     item:null,
     diaryData:null,

@@ -2,6 +2,7 @@
 
 <template>
   <div class="container"> 
+
         <el-menu :unique-opened="onlyOneOpened">
             
           <el-submenu  :class="d.answers_set.length == 0?clase['red']:clase[d.topic.id]" :index="item.toString()" v-for="(d, item) in data" :key="item">
@@ -17,6 +18,7 @@
                 <el-menu-item  v-for="line, sub2item in answer.answer" :key=sub2item :index="sub_item.toString()">
                   <pre >{{ line }}</pre>
                 </el-menu-item>
+
               Difficulty
               <el-slider show-stops v-model="sliderDifficultyEdit" :min="minDifficulty" :max="maxDifficulty"></el-slider>
               <br>
@@ -60,7 +62,7 @@
           <el-input type="text" placeholder="Escribe la respuesta verbal a condicionar" v-model="answer"></el-input>
         </div>
         <div>
-
+          <el-slider show-stops v-model="sliderDifficulty" :min="minDifficulty" :max="maxDifficulty"></el-slider>
           <el-select multiple filterable type="text" placeholder="Selecciona" v-model="selection" style="margin-top:20px">
             <el-option v-for="topic, item in topics" :label="topic.topic" :key="item" :value="topic.id"></el-option>
             
@@ -121,6 +123,7 @@ export default {
       maxCorrectness:10,
       types_of_abilities:[],
       urlInput:'',
+      //showUnansweredQuestions:Math.random()<0.5 ? 0 : 1
 
       
       
@@ -225,7 +228,8 @@ export default {
     
     console.log('what is sent')
     console.log(params)
-      axios.post('http://127.0.0.1:8000/sendAbility/', params)
+    this.$emit('listenToAbilityAdditions')
+    axios.post('http://127.0.0.1:8000/sendAbility/', params)
     .then(response=>{
       // console.log('response to sendAbility')
       console.log(response.data)
@@ -252,7 +256,14 @@ export default {
     .then(result=>{
       var count = 0
       result.data.forEach(el =>{
-        
+        console.log('el.answers_set[0].answer')
+        console.log(el)
+        // if(this.showUnansweredQuestions){
+        //   this.data.push(el)
+        // }else{
+
+        //   if(el.answers_set.length != 0) this.data.push(el)
+        // }
       //   // console.log('****************************************')
       //   // console.log(el)
       //   // console.log('****************************************')
