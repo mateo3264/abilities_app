@@ -1,40 +1,34 @@
 <template>
-    <div class="block">
+    <div class="block" >
         <el-timeline direction="horizontal" reverse=true>
-            <el-timeline-item v-for="(item, k) in diaryData" :key="k" :timestamp="item.created_at" placement="top" size="normal">
+            <el-timeline-item v-for="(item, k) in diaryData" :key="k"  placement="top" size="normal">
                 <el-card class="card">
                     <h4>{{item.created_at}}</h4>
                     <p>{{item.description}}</p>
                 </el-card>
             </el-timeline-item>
-            <!-- <el-timeline-item timestamp="2022/9/10" placement="top" size="normal">
-                <el-card class="card">
-                    <h4>Cómo</h4>
-                    <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Sequi, optio?</p>
-                </el-card>
-            </el-timeline-item>
-            <el-timeline-item timestamp="2022/9/5" placement="top" size="normal">
-                <el-card class="card">
-                    <h4>Estás</h4>
-                    <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Sequi, optio?</p>
-                </el-card>
-            </el-timeline-item>
-            <el-timeline-item timestamp="2022/9/1" placement="top" size="normal">
-                <el-card class="card">
-                    <h4>?</h4>
-                    <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Sequi, optio?</p>
-                </el-card>
-            </el-timeline-item> -->
+
 
         </el-timeline>
+        
+        <div>
+            <el-input type="textarea" v-model="diaryDescription" placeholder="Escribe en tu diario :)"></el-input>
+            <el-button @click="sendDiary">Enviar Descripción</el-button>
+        </div>
 
     </div>
+    
 </template>
 <script>
 import axios from 'axios'
 
 export default {
     name:'DiaryView',
+    data(){
+        return {
+            diaryDescription:''
+        }
+    },
     created(){
         axios.get('http://127.0.0.1:8000/diary/')
         .then(response=>{
@@ -52,6 +46,17 @@ export default {
                 this.$store.commit('updateDiaryData', value)
             }
         }
+    },
+    methods:{
+        sendDiary(){
+            const params = {
+                description:this.diaryDescription
+            }
+            axios.post('http://127.0.0.1:8000/post-in-diary/', params)
+            .then(response=>{
+                console.log(response)
+            })
+        }
     }
 
 }
@@ -59,10 +64,15 @@ export default {
 </script>
 
 <style scoped>
+.el-timeline{
+    height:70vh;
+    overflow:auto;
+}
 .card{
     width:500px;
 }
 .el-timeline-item__timestamp{
     margin-left:10px;
 }
+
 </style>
