@@ -127,7 +127,7 @@ export default {
         const today = moment().format('YYYY-MM-DD')
         this.metric = response.data['metric']
         //this.bar.series[0].data = [this.metric],
-        console.log(this.metric)
+        //console.log(this.metric)
         //var sum_total_abilities_by_day = 0
         this.metric.forEach(item =>{
           //TODO: Verify this code is correct
