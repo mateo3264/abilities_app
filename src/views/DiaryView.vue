@@ -13,8 +13,18 @@
         
         <div>
             <el-input type="textarea" v-model="diaryDescription" placeholder="Escribe en tu diario :)"></el-input>
+            <el-date-picker
+                v-model="datetimeOfDescription"
+                :placeholder="Date()"
+                type="datetime"
+                :picker-options="pickerOptions"
+                :default-value="Date()"
+                >
+
+            </el-date-picker><br>
             <el-button @click="sendDiary">Enviar Descripción</el-button>
         </div>
+        
 
     </div>
     
@@ -26,7 +36,18 @@ export default {
     name:'DiaryView',
     data(){
         return {
-            diaryDescription:''
+            diaryDescription:'',
+            datetimeOfDescription:'',
+            pickerOptions:{
+                shortcuts:[
+                    {
+                        text:'Today',
+                        onClick(picker){
+                            picker.$emit('pick', new Date())
+                        }
+                    }
+                ]
+            }
         }
     },
     created(){
@@ -50,7 +71,8 @@ export default {
     methods:{
         sendDiary(){
             const params = {
-                description:this.diaryDescription
+                description:this.diaryDescription,
+                datetime:this.datetimeOfDescription
             }
             axios.post('http://127.0.0.1:8000/post-in-diary/', params)
             .then(response=>{

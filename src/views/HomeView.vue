@@ -9,8 +9,8 @@
             <div>
              
             </div>
-            <template v-if="d.type.id == 1" slot="title"><el-icon class="el-icon-question"></el-icon>{{ item }} - {{d.ability}} - {{ d.topic.topic }} - {{d.n_times_reviewed}} - {{ d.difficulty }} - {{ d.type.type }} <el-button type="primary" class="el-icon-edit" circle @click="editPage(d, item)"></el-button></template>
-            <template v-else-if="d.type.id == 2" slot="title"><el-icon class="el-icon-question"></el-icon>{{ item }} - TACTEO :D - {{ d.topic.topic }} - {{d.n_times_reviewed}} - {{ d.difficulty }} - {{ d.type.type }} - {{d.answer_correctness}}<el-button class="el-icon-edit" circle @click="editPage(d, item)"></el-button></template>
+            <template v-if="d.type.id == 1" slot="title"><el-icon class="el-icon-question"></el-icon>{{ item }} - {{d.ability}} - {{ d.topic.topic }} - {{ d.days_to_present_again }} - {{ d.created_at.slice(0, 10) }}<el-button type="primary" class="el-icon-edit" circle @click="editPage(d, item)"></el-button></template>
+            <template v-else-if="d.type.id == 2" slot="title"><el-icon class="el-icon-question"></el-icon>{{ item }} - TACTEO :D - {{ d.topic.topic }} - {{ d.days_to_present_again }} - {{ d.created_at.slice(0, 10) }}<el-button class="el-icon-edit" circle @click="editPage(d, item)"></el-button></template>
             
             <div v-if="d.type.type == types_of_abilities[0]">
               
