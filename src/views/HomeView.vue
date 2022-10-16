@@ -63,6 +63,13 @@
         </div>
         <div>
           <el-slider show-stops v-model="sliderDifficulty" :min="minDifficulty" :max="maxDifficulty"></el-slider>
+          <el-tooltip class="item" effect="dark" content="Añade un nuevo Tópico">
+            <el-button class="primary" @click="showAddTopicWindow">+</el-button>
+          </el-tooltip>
+          <el-dialog :visible.sync="showAddTopicWindowVar">
+            <el-input v-model="newTopic" placeholder="Escribe el nuevo Tópico"></el-input>
+            <el-button @click="addTopic">Enviar Tópico</el-button>
+          </el-dialog>
           <el-select multiple filterable type="text" placeholder="Selecciona" v-model="selection" style="margin-top:20px">
             <el-option v-for="topic, item in topics" :label="topic.topic" :key="item" :value="topic.id"></el-option>
             
@@ -123,6 +130,8 @@ export default {
       maxCorrectness:10,
       types_of_abilities:[],
       urlInput:'',
+      showAddTopicWindowVar:false,
+      newTopic:'',
       //showUnansweredQuestions:Math.random()<0.5 ? 0 : 1
 
       
@@ -238,6 +247,20 @@ export default {
       this.selection = ''
     })
     },
+    showAddTopicWindow(){
+      this.showAddTopicWindowVar = true
+    },
+    addTopic(){
+      console.log('Envío Dummy!')
+      console.log(this.newTopic)
+      const params = {
+        new_topic:this.newTopic
+      }
+      axios.post('http://127.0.0.1:8000/add-topic/', params)
+      .then(response=>{
+        console.log(response)
+      })
+    }
   },
   mounted(){
     axios.get('http://127.0.0.1:8000/abilities-reviewed-today/')
@@ -337,7 +360,7 @@ img{
   
 }
 ul{
-  height:400px;
+  height:40vh;
   overflow:auto;
 }
 .el-submenu{
