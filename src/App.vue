@@ -4,7 +4,8 @@
       <router-link to="/" >Home</router-link> |
       <router-link v-if="addedGraphsPage" to="/graphs">Graph</router-link> <span v-if="false"> |</span>
       <router-link to="/diary">Diary</router-link> |
-      <router-link to="/goals">Goals</router-link>
+      <router-link to="/goals">Goals</router-link> |
+      <router-link to="/time">Time Studying</router-link>
       
       
     </nav>
