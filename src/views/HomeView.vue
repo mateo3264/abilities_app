@@ -70,7 +70,7 @@
             <el-input v-model="newTopic" placeholder="Escribe el nuevo Tópico"></el-input>
             <el-button @click="addTopic">Enviar Tópico</el-button>
           </el-dialog>
-          <el-select multiple filterable type="text" placeholder="Selecciona" v-model="selection" style="margin-top:20px">
+          <el-select multiple filterable type="text" placeholder="Selecciona" v-model="selection"  style="margin-top:20px">
             <el-option v-for="topic, item in topics" :label="topic.topic" :key="item" :value="topic.id"></el-option>
             
           </el-select>
