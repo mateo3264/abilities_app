@@ -259,6 +259,7 @@ export default {
       axios.post('http://127.0.0.1:8000/add-topic/', params)
       .then(response=>{
         console.log(response)
+        this.showAddTopicWindowVar = false
       })
     }
   },
