@@ -14,6 +14,7 @@
 
 <script>
 import SelectTopic from '@/components/TopicComponent.vue'
+import {mapState} from 'vuex'
 //import axios from 'axios'
 export default {
     name:"TimeStudyingView",
@@ -22,25 +23,45 @@ export default {
     },
     data(){
         return {
-            time:0,
-            measure:false,
+            
+            
             selection:'',
+        }
+    },
+    computed:{
+        ...mapState(['time', 'measure']),
+        time:{
+            get(){
+                return this.$store.state.time
+            },
+            set(){
+                this.$store.commit('updateTime')
+            }
+        },
+        measure:{
+            get(){
+                return this.$store.state.measure
+            },
+            set(){
+                this.$store.commit('updateMeasure')
+            }
         }
     },
     methods:{
         runTime(){
             setTimeout(()=>{
                 
-                if (this.measure){
-                    console.log(this.measure)
+                if (this.$store.state.measure){
+                    
                     this.runTime()
                     this.time++
                 }
             }, 1000)
         },
         startMeasuring(){
-            this.measure = !this.measure
-            
+            //this.measure = !this.measure
+            this.$store.commit('updateMeasure')
+            console.log(this.$store.state.measure)
             this.runTime()
             
         },
