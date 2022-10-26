@@ -13,6 +13,9 @@ export default new Vuex.Store({
     sliderDifficultyEdit:5,
     item:null,
     diaryData:null,
+    abilitiesAddedToday:0,
+    time:0,
+    measure:false
   },
   getters: {
   },
@@ -36,6 +39,16 @@ export default new Vuex.Store({
       updateDiaryData(state, payload){
         state.diaryData = payload
       },
+      updateAbilitiesAddedToday(state){
+        state.abilitiesAddedToday++
+      },
+      updateTime(state){
+        state.time++
+      },
+      updateMeasure(state){
+        state.measure = !state.measure
+      }
+      
     
   },
   actions: {

@@ -28,6 +28,11 @@
           <v-chart :options="radar"/>
         </div>
       </el-card>
+      <el-card>
+        <div class="line666">
+          <v-chart :options="line666"></v-chart>
+        </div>
+      </el-card>
       </el-col>
     </el-row>
   </div>
@@ -50,6 +55,11 @@
 .echarts {
   width: 100%;
   height: 100%;
+}
+
+.line666{
+  width:100%;
+  height:500px;
 }
 </style>
 
@@ -237,13 +247,18 @@ export default {
     },
     saySomething(){
       console.log('here')
+    },
+    metaDiaria(){
+      this.line666.series[0].data = [1, 15, 45, 135]
     }
   },
+
   mounted(){
       this.getAbilitiesByDay()
       this.abilitiesReviewedByDay()
       this.getAllTopics()
       this.abilitiesReviewedByTopic()
+      this.metaDiaria()
       //this.radar.series[0].data = this.dataBJ
       //this.radar.series[0].lineStyle = this.lineStyle
       // axios.get('http://127.0.0.1:8000/metrics/abilities-by-day/')
@@ -431,6 +446,20 @@ export default {
           }
         ],
       },
+    line666:{
+      xAxis:{
+        type:'category'
+      },
+      yAxis:{
+        type:'value'
+      },
+      series:[
+        {
+          type:'line',
+          data:[]
+        }
+      ]
+    },
     bar: {
         title: {
           text: "Hola",

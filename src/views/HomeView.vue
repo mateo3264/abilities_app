@@ -9,8 +9,8 @@
             <div>
              
             </div>
-            <template v-if="d.type.id == 1" slot="title"><el-icon class="el-icon-question"></el-icon>{{ item }} - {{d.ability}} - {{ d.topic.topic }} - {{ d.days_to_present_again }} - {{ d.created_at.slice(0, 10) }}<el-button type="primary" class="el-icon-edit" circle @click="editPage(d, item)"></el-button></template>
-            <template v-else-if="d.type.id == 2" slot="title"><el-icon class="el-icon-question"></el-icon>{{ item }} - TACTEO :D - {{ d.topic.topic }} - {{ d.days_to_present_again }} - {{ d.created_at.slice(0, 10) }}<el-button class="el-icon-edit" circle @click="editPage(d, item)"></el-button></template>
+            <template v-if="d.type.id == 1" slot="title"><el-icon class="el-icon-question"></el-icon>{{ item }} - {{d.ability}} - {{ d.topic.topic }} - {{ d.days_to_present_again }} - {{ d.last_presentation_at.slice(0, 10) }}<el-button type="primary" class="el-icon-edit" circle @click="editPage(d, item)"></el-button></template>
+            <template v-else-if="d.type.id == 2" slot="title"><el-icon class="el-icon-question"></el-icon>{{ item }} - TACTEO :D - {{ d.topic.topic }} - {{ d.days_to_present_again }} - {{ d.last_presentation_at.slice(0, 10) }}<el-button class="el-icon-edit" circle @click="editPage(d, item)"></el-button></template>
             
             <div v-if="d.type.type == types_of_abilities[0]">
               
@@ -41,6 +41,7 @@
                 <el-slider show-stops v-model="sliderDifficultyEdit" :min="minDifficulty" :max="maxDifficulty"></el-slider>
                 <el-button @click="onChange({item:item, edit:false})">Enviar Repaso de Habilidad</el-button>
               </el-menu>
+              
 
             </div>
               
@@ -81,6 +82,8 @@
           <el-button @click="decrementShowInput" icon="el-icon-arrow-left">{{ this.types_of_abilities[showInput - 2]}}</el-button>
           <el-button  @click="incrementShowInput">{{ this.types_of_abilities[showInput]}}<i class="el-icon-arrow-right"></i></el-button>
         </el-button-group>
+        
+
   </div>
   
 </template>
@@ -121,6 +124,7 @@ export default {
       showInput:1,
       MinimumAbilitiesReviewedPerDay:null,
       abilitiesReviewedToday:0,
+      //abilitiesAddedToday:0,
       elementsReviewed:{},
       sliderDifficultyEdit:5,
       sliderDifficulty:5,
@@ -139,7 +143,15 @@ export default {
     }
   },
   computed:{
-            ...mapState(['item']),
+            ...mapState(['item', 'abilitiesAddedToday']),
+            abilitiesAddedToday:{
+              get(){
+                return this.$store.state.abilitiesAddedToday
+              },
+              set(){
+                this.$store.commit('updateAbilitiesAddedToday')
+              }
+            },
             data:{
               get(){
                 return this.$store.state.data
@@ -246,6 +258,16 @@ export default {
       this.answer = ''
       this.selection = ''
     })
+    console.log('typeof this.abilitiesAddedToday')
+    console.log(typeof this.abilitiesAddedToday)
+    console.log(this.abilitiesAddedToday)
+    this.$store.commit('updateAbilitiesAddedToday')
+    if(this.abilitiesAddedToday>=3){
+      console.log('this.abilitiesAddedToday')
+      console.log('what????')
+      console.log(this.abilitiesAddedToday)
+      this.open1(this.abilitiesAddedToday)
+      }
     },
     showAddTopicWindow(){
       this.showAddTopicWindowVar = true
@@ -261,9 +283,22 @@ export default {
         console.log(response)
         this.showAddTopicWindowVar = false
       })
+    },
+    open1(number){
+      console.log('que pasa')
+      const h = this.$createElement
+      var random_n = Math.random()
+      if (random_n>0.7){
+        console.log(`Entro! ${random_n}`)
+        this.$notify({
+          title:'Refuerzo:',
+          message:h('i', {style: 'color: teal'}, `Good! ${number} of abilities added today`)
+        })
+      }
     }
   },
   mounted(){
+    
     axios.get('http://127.0.0.1:8000/abilities-reviewed-today/')
     .then(response=>{  
       this.abilitiesReviewedToday = response.data.n_reviewed_abilities_today 
