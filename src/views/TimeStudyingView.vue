@@ -15,6 +15,7 @@
 <script>
 import SelectTopic from '@/components/TopicComponent.vue'
 import {mapState} from 'vuex'
+import moment from 'moment'
 //import axios from 'axios'
 export default {
     name:"TimeStudyingView",
@@ -60,8 +61,24 @@ export default {
         },
         startMeasuring(){
             //this.measure = !this.measure
+            console.log("moment().subtract(10, 'days').calendar()")
+            
             this.$store.commit('updateMeasure')
             console.log(this.$store.state.measure)
+            if (this.$store.state.measure){
+                const startTime = moment()//.minute()
+                console.log('startTime')
+                console.log(startTime)
+                //console.log(typeof startTime)
+            }else{
+                console.log('moment() - startTime')
+                //console.log(typeof Number(this.startTime))
+                var now = moment()
+                console.log('now')
+                console.log(now)
+                console.log(now.diff(this.startTime, 'minutes'))//.minute())
+            }
+
             this.runTime()
             
         },
