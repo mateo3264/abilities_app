@@ -66,7 +66,7 @@ export default new Vuex.Store({
         console.log('pq?')
         console.log('this.state.data[obj.item]')
         console.log(this.state.data[obj.item])
-        this.state.data[obj.item].n_times_reviewed += 1
+        //this.state.data[obj.item].n_times_reviewed += 1
         this.state.data[obj.item].answer_correctness = this.state.answerCorrectness
       }else{
 

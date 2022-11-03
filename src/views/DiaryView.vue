@@ -77,6 +77,7 @@ export default {
             axios.post('http://127.0.0.1:8000/post-in-diary/', params)
             .then(response=>{
                 console.log(response)
+                this.diaryData.push(response.data)
             })
         }
     }
