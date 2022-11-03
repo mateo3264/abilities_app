@@ -3,19 +3,19 @@
 <template>
   <div class="container"> 
 
-        <el-menu :unique-opened="onlyOneOpened">
+        <el-menu @open="showCloseReviewWindow" :unique-opened="onlyOneOpened">
             
           <el-submenu  :class="d.answers_set.length == 0?clase['red']:clase[d.topic.id]" :index="item.toString()" v-for="(d, item) in data" :key="item">
             <div>
              
             </div>
-            <template v-if="d.type.id == 1" slot="title"><el-icon class="el-icon-question"></el-icon>{{ item }} - {{d.ability}} - {{ d.topic.topic }} - {{ d.days_to_present_again }} - {{ d.last_presentation_at.slice(0, 10) }} - {{d.created_at.slice(0, 10)}}<el-button type="primary" class="el-icon-edit" circle @click="editPage(d, item)"></el-button></template>
+            <template  v-if="d.type.id == 1" slot="title"><el-icon class="el-icon-question"></el-icon>{{ item }} - {{d.ability}} - {{ d.topic.topic }} - {{ d.days_to_present_again }} - {{ d.last_presentation_at.slice(0, 10) }} - {{d.created_at.slice(0, 10)}}<el-button type="primary" class="el-icon-edit" circle @click="editPage(d, item)"></el-button></template>
             <template v-else-if="d.type.id == 2" slot="title"><el-icon class="el-icon-question"></el-icon>{{ item }} - TACTEO :D - {{ d.topic.topic }} - {{ d.days_to_present_again }} - {{ d.last_presentation_at.slice(0, 10) }} - {{d.created_at.slice(0, 10)}}<el-button class="el-icon-edit" circle @click="editPage(d, item)"></el-button></template>
-            
+            <el-dialog :visible.sync="showReviewAbilityVar" :modalAppendToBody="false">
             <div v-if="d.type.type == types_of_abilities[0]">
               
-              <el-menu-item-group v-for="(answer,sub_item) in d.answers_set" :key="sub_item">
-                <el-menu-item  v-for="line, sub2item in answer.answer" :key=sub2item :index="sub_item.toString()">
+              <el-menu-item-group  v-for="(answer,sub_item) in d.answers_set" :key="sub_item">
+                <el-menu-item   v-for="line, sub2item in answer.answer" :key=sub2item :index="sub_item.toString()">
                   <pre >{{ line }}</pre>
                 </el-menu-item>
 
@@ -27,6 +27,7 @@
               <el-button @click="onChange({item:item, edit:false})">Enviar Repaso de Habilidad</el-button>
               </el-menu-item-group>
             </div>
+            
             <div v-else-if="d.type.type == types_of_abilities[1]">
               <el-image :src="d.ability" fit="scale-down"></el-image>
               <el-menu>
@@ -37,13 +38,18 @@
                     {{d.answers_set[0].answer[0]}}
                   </el-menu-item>
                 </el-submenu>
-                
+                Difficulty
                 <el-slider show-stops v-model="sliderDifficultyEdit" :min="minDifficulty" :max="maxDifficulty"></el-slider>
+                <br>
+                Percentage of Correct Answer
+                <el-slider show-stops v-model="answerCorrectness" :min="minCorrectness" :max="maxCorrectness"></el-slider>
+                  
                 <el-button @click="onChange({item:item, edit:false})">Enviar Repaso de Habilidad</el-button>
               </el-menu>
               
 
             </div>
+            </el-dialog>
               
           </el-submenu>
         </el-menu>
@@ -135,6 +141,7 @@ export default {
       types_of_abilities:[],
       urlInput:'',
       showAddTopicWindowVar:false,
+      showReviewAbilityVar:false,
       newTopic:'',
       //showUnansweredQuestions:Math.random()<0.5 ? 0 : 1
 
@@ -187,6 +194,10 @@ export default {
   },
   methods:{
     ...mapActions(['onChange']),
+    showCloseReviewWindow(event){
+      console.log('YAAAAAAAAAAAAAA', event)
+      this.showReviewAbilityVar = !this.showReviewAbilityVar
+    },
     editPage(d, item){
       console.log('EDIT')
       console.log("d.answers_set[0].answer.join(\n)")
@@ -381,7 +392,10 @@ export default {
       console.log('types of abilities')
       console.log(this.types_of_abilities)
     })
-    
+  // const random_route_idx = Math.floor(Math.random()*this.$router.options.routes.length)
+  // console.table({'random_route_idx':random_route_idx})
+  // console.log('route', this.$router.options.routes[random_route_idx].path)
+  // this.$router.push(this.$router.options.routes[random_route_idx].path) 
   }
 }
 </script>
