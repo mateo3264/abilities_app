@@ -33,13 +33,16 @@ export default {
     },
     methods:{
         deepWoods(){
-            this.treeIdx++
-            console.log(this.treeIdx)
+            
+            if (this.treeIdx == this.dataFromServer.length - 1) this.treeIdx = 0
+            else  this.treeIdx++
+            
             this.tree.series[0].data = [this.dataFromServer[this.treeIdx]]
         },
         shallowWoods(){
-            this.treeIdx--
-            console.log(this.treeIdx)
+            if (this.treeIdx == 0) this.treeIdx= this.dataFromServer.length - 1
+            else this.treeIdx--
+            
             this.tree.series[0].data = [this.dataFromServer[this.treeIdx]]
         }
     },

@@ -129,7 +129,7 @@ export default {
       token:true,
       showInput:1,
       MinimumAbilitiesReviewedPerDay:null,
-      abilitiesReviewedToday:0,
+      //abilitiesReviewedToday:0,
       //abilitiesAddedToday:0,
       elementsReviewed:{},
       sliderDifficultyEdit:5,
@@ -141,7 +141,7 @@ export default {
       types_of_abilities:[],
       urlInput:'',
       showAddTopicWindowVar:false,
-      showReviewAbilityVar:false,
+      //showReviewAbilityVar:false,
       newTopic:'',
       //showUnansweredQuestions:Math.random()<0.5 ? 0 : 1
 
@@ -150,13 +150,30 @@ export default {
     }
   },
   computed:{
-            ...mapState(['item', 'abilitiesAddedToday']),
+            ...mapState(['item', 'abilitiesAddedToday', 'abilitiesReviewedToday', 'showReviewAbilityVar']),
+            showReviewAbilityVar:{
+              get(){
+                return this.$store.state.showReviewAbilityVar
+              },
+              set(){
+                this.$store.commit('updateShowReviewAbilityVar')
+              }
+            },
             abilitiesAddedToday:{
               get(){
                 return this.$store.state.abilitiesAddedToday
               },
               set(){
                 this.$store.commit('updateAbilitiesAddedToday')
+              },
+              abilitiesReviewedToday:{
+                get(){
+                  return this.$store.state.abilitiesReviewedToday
+                },
+                set(){
+                  this.$store.commit('updateAbilitiesReviewedToday')
+                }
+
               }
             },
             data:{
@@ -193,10 +210,12 @@ export default {
             }
   },
   methods:{
-    ...mapActions(['onChange']),
+    ...mapActions(['onChange', 'showReinforcerForReviewing']),
     showCloseReviewWindow(event){
       console.log('YAAAAAAAAAAAAAA', event)
-      this.showReviewAbilityVar = !this.showReviewAbilityVar
+      //this.showReviewAbilityVar = !this.showReviewAbilityVar
+      this.$store.commit('updateShowReviewAbilityVar')
+
     },
     editPage(d, item){
       console.log('EDIT')
@@ -273,6 +292,7 @@ export default {
     console.log(typeof this.abilitiesAddedToday)
     console.log(this.abilitiesAddedToday)
     this.$store.commit('updateAbilitiesAddedToday')
+    
     if(this.abilitiesAddedToday>=3){
       console.log('this.abilitiesAddedToday')
       console.log('what????')
@@ -306,7 +326,8 @@ export default {
           message:h('i', {style: 'color: teal'}, `Good! ${number} of abilities added today`)
         })
       }
-    }
+    },
+    
   },
   mounted(){
     
@@ -324,7 +345,7 @@ export default {
     // console.log(window.location.href)
     axios.get('http://127.0.0.1:8000/')
     .then(result=>{
-      var count = 0
+      
       result.data.forEach(el =>{
         console.log('el.answers_set[0].answer')
         console.log(el)
@@ -338,25 +359,21 @@ export default {
       //   // console.log(el)
       //   // console.log('****************************************')
         
-        try{
-          if (count >= 0 ){
+        
 
             el.answers_set[0].answer = el.answers_set[0].answer.split('\n')
             if (!this.topics_list.includes(el.topic.topic)){
               this.topics_list.push(el.topic.topic)
               this.topics.push({topic:el.topic.topic, id:el.topic.id})
             }
-          }
+          
           
 
         // el.answers_set[0].answer.forEach(it=>{
         //   console.log(it)
         // })
-        } catch(error){
-             
-          console.log(error)
-        }
-        count++
+        
+        
       })
       this.data = result.data
 
